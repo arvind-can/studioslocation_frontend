@@ -1,7 +1,7 @@
 import Menubar from '@/components/menubar/Menubar.jsx'
 import HomeSearchCard from '@/components/search/HomeSearchCard.jsx'
 
-export default function App() {
+export default function HomePage() {
   return (
     <>
       <Menubar />
