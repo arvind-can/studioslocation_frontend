@@ -5,7 +5,7 @@ import FavoritesButton from '@/components/menubar/buttons/FavoritesButton.jsx'
 import AccountButton from '@/components/menubar/buttons/AccountButton.jsx'
 
 export default function ActionButtons() {
-  const [userConnected, setUserConnected] = useState(true)
+  const [userConnected, setUserConnected] = useState(false)
 
   return (
     <div className={'flex justify-center content-center gap-x-2'}>

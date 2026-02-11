@@ -1,7 +1,6 @@
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card.jsx'
+import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import SearchQuestion from '@/components/search/SearchQuestion.jsx'
 import SearchForm from '@/components/search/SearchForm.jsx'
-import { Button } from '@/components/ui/button.jsx'
 
 export default function HomeSearchCard() {
   return (
@@ -12,11 +11,6 @@ export default function HomeSearchCard() {
       <CardContent>
         <SearchForm />
       </CardContent>
-      <CardFooter>
-        <Button type='submit' className='w-full'>
-          Rechercher
-        </Button>
-      </CardFooter>
     </Card>
   )
 }
