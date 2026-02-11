@@ -135,3 +135,11 @@ p {
 button:active {
     transform: scale(0.97);
 }
+
+.searchError {
+    color: red;
+    font-size: small;
+    margin-top: 4px;
+    margin-left: 4px;
+
+}

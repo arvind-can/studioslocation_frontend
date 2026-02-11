@@ -3,8 +3,8 @@ import { useController } from 'react-hook-form'
 
 //As a part of a form, this component uses react hook form.
 // This is a component controlled by useController.
-export default function ToggleFilters({ name, registerKey, control, filters }) {
-  const { field } = useController({ name: registerKey, control })
+export default function ToggleFilters({ name, registerKey, registerFn, filters }) {
+  const { field } = useController({ name: registerKey, control: registerFn })
 
   return (
     <>
@@ -18,7 +18,7 @@ export default function ToggleFilters({ name, registerKey, control, filters }) {
           onValueChange={field.onChange}
         >
           {filters.map((filter) => (
-            <ToggleGroupItem key={filter.registerKey} value={filter.registerKey} variant={'outline'}>
+            <ToggleGroupItem key={filter.value} value={filter.value} variant={'outline'}>
               {filter.symbol} {filter.name}
             </ToggleGroupItem>
           ))}
