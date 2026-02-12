@@ -1,13 +1,14 @@
 import LocationFilter from '@/components/search/filters/LocationFilter.jsx'
 import { Armchair, CookingPot, Euro, Toilet } from 'lucide-react'
 import { Button } from '@/components/ui/button.jsx'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import MinMaxFilter from '@/components/search/filters/MinMaxFilter.jsx'
 import ToggleFilters from '@/components/search/filters/ToggleFilters.jsx'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 export default function SearchForm() {
+  //Validation schema of the form data
   const searchSchema = yup.object().shape({
     location: yup.string(),
     minRent: yup
@@ -34,15 +35,10 @@ export default function SearchForm() {
       .min(yup.ref('minSurface'), 'La surface maximale est inférieur à la minimale')
   })
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    resolver: yupResolver(searchSchema),
-    mode: 'onBlur'
-  })
+  //Form Provider, Form definition to handle Form data (FP helps passing useForm methods (register, watch...) in children)
+  //Connect schema with the form for validation
+  const methods = useForm({ resolver: yupResolver(searchSchema), mode: 'onBlur' })
+  const { handleSubmit } = methods
 
   const onSubmitHandler = (data) => {
     console.log(data)
@@ -66,45 +62,22 @@ export default function SearchForm() {
     }
   ]
 
+  //Return a Formprovider with a Form containing multiple filters and their error messages
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)} className='flex flex-col gap-y-5'>
-      <div>
-        <LocationFilter registerKey='location' registerFn={register} />
-        {errors.location && <div className={'searchError'}> {errors.location.message}</div>}
-      </div>
-      <div>
-        <MinMaxFilter
-          name='Loyer'
-          symbol={<Euro />}
-          registerKey='rent'
-          registerFn={register}
-          registerKeys={{ min: 'minRent', max: 'maxRent' }}
-        />
-        {errors.minRent ? (
-          <div className={'searchError'}>{errors.minRent.message}</div>
-        ) : (
-          errors.maxRent && <div className={'searchError'}>{errors.maxRent.message}</div>
-        )}
-      </div>
-      <div>
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(onSubmitHandler)} className='flex flex-col gap-y-5'>
+        <LocationFilter name='Localisation' registerKey='location' />
+        <MinMaxFilter name='Loyer' symbol={<Euro />} registerKeys={{ min: 'minRent', max: 'maxRent' }} />
         <MinMaxFilter
           name='Surface Habitable'
           symbol={<span>m²</span>}
-          registerFn={register}
           registerKeys={{ min: 'minSurface', max: 'maxSurface' }}
         />
-        {errors.minSurface ? (
-          <div>{errors.minSurface.message}</div>
-        ) : (
-          errors.maxSurface && <div>{errors.maxSurface.message}</div>
-        )}
-      </div>
-
-      <ToggleFilters name='Caractéristiques' registerKey='features' registerFn={control} filters={featureFilters} />
-
-      <Button type='submit' className='w-full'>
-        Rechercher
-      </Button>
-    </form>
+        <ToggleFilters name='Caractéristiques' registerKey='features' filters={featureFilters} />
+        <Button type='submit' className='w-full'>
+          Rechercher
+        </Button>
+      </form>
+    </FormProvider>
   )
 }
