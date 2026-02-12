@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/combobox.jsx'
 import { useFormContext } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
+import { useDebounce } from 'use-debounce'
 import axios from 'axios'
 
 //As a part of a form, this component uses react hook form and its register/keys for data passing
@@ -18,7 +19,7 @@ export default function LocationFilter({ name, registerKey }) {
     watch,
     formState: { errors }
   } = useFormContext()
-  const locationInput = watch(registerKey)
+  const [locationInput] = useDebounce(watch(registerKey), 200)
 
   //Query API
   const { data } = useQuery({
@@ -60,7 +61,7 @@ export default function LocationFilter({ name, registerKey }) {
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
-      {errors[registerKey] && <div className={'searchError'}>{errors[registerKey].message}</div>}
+      {errors[registerKey] && <div className={'searchError'}>Erreur lors du chargement des villes</div>}
     </div>
   )
 }

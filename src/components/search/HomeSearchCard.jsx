@@ -4,7 +4,7 @@ import SearchForm from '@/components/search/SearchForm.jsx'
 
 export default function HomeSearchCard() {
   return (
-    <Card className={'lg:w-1/2 sm:w-3/4'}>
+    <Card className={'lg:w-1/2 md:2/3 sm:w-3/4'}>
       <CardHeader>
         <SearchQuestion />
       </CardHeader>
