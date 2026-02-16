@@ -5,6 +5,7 @@ import HomePage from './components/pages/HomePage.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import LoginPage from '@/components/pages/LoginPage.jsx'
+import ResultsPage from '@/components/pages/ResultsPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />
+  },
+  {
+    path: '/results',
+    element: <ResultsPage />
   }
 ])
 

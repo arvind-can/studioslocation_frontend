@@ -5,7 +5,7 @@ import { useController, useFormContext } from 'react-hook-form'
 //This is a component controlled by a Controller
 export default function ToggleFilters({ name, registerKey, filters }) {
   const { control } = useFormContext()
-  const { field } = useController({ name: registerKey, control: control, defaultValue: [] })
+  const { field } = useController({ name: registerKey, control: control })
 
   return (
     <div className={'flex flex-col justify-between content-center gap-y-2'}>
@@ -14,8 +14,8 @@ export default function ToggleFilters({ name, registerKey, filters }) {
         className={'flex flex-row flex-wrap'}
         type='multiple'
         spacing={2}
-        value={field.value}
-        onValueChange={field.onChange}
+        value={field?.value}
+        onValueChange={field?.onChange}
       >
         {filters.map((filter) => (
           <ToggleGroupItem key={filter.value} value={filter.value} variant={'outline'}>

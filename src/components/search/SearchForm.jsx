@@ -6,33 +6,44 @@ import MinMaxFilter from '@/components/search/filters/MinMaxFilter.jsx'
 import ToggleFilters from '@/components/search/filters/ToggleFilters.jsx'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigate } from 'react-router-dom'
 
-export default function SearchForm() {
+export function SearchForm() {
   //Validation schema of the form data
   const searchSchema = yup.object().shape({
-    location: yup.string(),
+    location: yup.string().optional(),
     minRent: yup
       .number()
       .transform((value, originalValue) => (originalValue.trim() === '' ? undefined : value))
       .positive('Saisissez un entier positif')
-      .integer('Saisissez un entier positif'),
+      .integer('Saisissez un entier positif')
+      .optional(),
     maxRent: yup
       .number()
       .transform((value, originalValue) => (originalValue.trim() === '' ? undefined : value))
       .positive('Saisissez un entier positif')
       .integer('Saisissez un entier positif')
-      .min(yup.ref('minRent'), 'Le loyer maximal est inférieur au minimal'),
+      .when('minRent', {
+        is: (rent) => rent !== undefined,
+        then: (schema) => schema.min(yup.ref('minRent'), 'Le loyer maximal est inférieur au minimal')
+      })
+      .optional(),
     minSurface: yup
       .number()
       .transform((value, originalValue) => (originalValue.trim() === '' ? undefined : value))
       .positive('Saisissez un entier positif')
-      .integer('Saisissez un entier positif'),
+      .integer('Saisissez un entier positif')
+      .optional(),
     maxSurface: yup
       .number()
       .transform((value, originalValue) => (originalValue.trim() === '' ? undefined : value))
       .positive('Saisissez un entier positif')
       .integer('Saisissez un entier positif')
-      .min(yup.ref('minSurface'), 'La surface maximale est inférieur à la minimale')
+      .when('minSurface', {
+        is: (surface) => surface !== undefined,
+        then: (schema) => schema.min(yup.ref('minSurface'), 'La surface maximale est inférieure à la minimale')
+      })
+      .optional()
   })
 
   //Form Provider, Form definition to handle Form data (FP helps passing useForm methods (register, watch...) in children)
@@ -40,24 +51,36 @@ export default function SearchForm() {
   const methods = useForm({ resolver: yupResolver(searchSchema), mode: 'onBlur' })
   const { handleSubmit } = methods
 
+  //Build search parameters based on form data
+  const navigate = useNavigate()
   const onSubmitHandler = (data) => {
-    console.log(data)
+    const cleanedFormData = Object.assign(data)
+
+    //Remove empty entries from the form
+    Object.keys(cleanedFormData).forEach((key) => {
+      if (cleanedFormData[key] === undefined || cleanedFormData[key].length === 0) delete cleanedFormData[key]
+    })
+
+    //Navigate to the results url with its params
+    const listingsSearchParams = new URLSearchParams(cleanedFormData)
+    console.log(listingsSearchParams.toString())
+    navigate(`/results?${listingsSearchParams.toString()}`)
   }
 
   const featureFilters = [
     {
       name: 'Meublé',
-      value: 'furniture',
+      value: 'hasFurniture',
       symbol: <Armchair />
     },
     {
       name: 'WC privé',
-      value: 'attachedToilet',
+      value: 'hasAttachedToilet',
       symbol: <Toilet />
     },
     {
       name: 'Cuisine privée',
-      value: 'attachedKitchen',
+      value: 'hasAttachedKitchen',
       symbol: <CookingPot />
     }
   ]

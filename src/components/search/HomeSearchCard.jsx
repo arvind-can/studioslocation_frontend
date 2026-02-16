@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import SearchQuestion from '@/components/search/SearchQuestion.jsx'
-import SearchForm from '@/components/search/SearchForm.jsx'
+import { SearchForm } from '@/components/search/SearchForm.jsx'
 
 export default function HomeSearchCard() {
   return (
