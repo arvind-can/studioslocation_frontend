@@ -61,6 +61,15 @@ export function SearchForm() {
       if (cleanedFormData[key] === undefined || cleanedFormData[key].length === 0) delete cleanedFormData[key]
     })
 
+    //Parse location into city and codePostal
+    //Note : Last space and integer is postalCode, the rest is City
+    if (cleanedFormData['location'] !== undefined) {
+      const [_, city, postalCode] = cleanedFormData['location'].match(/^(.*)\s*\((\d+)\)$/)
+      cleanedFormData['city'] = city.trim()
+      cleanedFormData['postalCode'] = postalCode
+      delete cleanedFormData['location']
+    }
+
     //Navigate to the results url with its params
     const listingsSearchParams = new URLSearchParams(cleanedFormData)
     console.log(listingsSearchParams.toString())
