@@ -1,6 +1,6 @@
 import { Item, ItemContent, ItemDescription, ItemHeader, ItemTitle } from '@/components/ui/item.jsx'
 
-export default function ResultItem({ name, price, surface, image }) {
+export default function ResultItem({ name, rent, surface, image }) {
   return (
     <Item variant={'outline'}>
       <ItemHeader>
@@ -11,7 +11,7 @@ export default function ResultItem({ name, price, surface, image }) {
           <span className={'truncate'}>{name}</span>
         </ItemTitle>
         <ItemDescription>
-          {price} {surface}
+          {rent} {surface}
         </ItemDescription>
       </ItemContent>
     </Item>

@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import LoginPage from '@/components/pages/LoginPage.jsx'
 import ResultsPage from '@/components/pages/ResultsPage.jsx'
+import { Toaster } from 'sonner'
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,11 @@ const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    {/* To display info as toast*/}
+    <Toaster />
+    {/*To query*/}
     <QueryClientProvider client={queryClient}>
+      {/*To navigate*/}
       <RouterProvider router={router} />
     </QueryClientProvider>
   </StrictMode>

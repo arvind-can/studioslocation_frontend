@@ -72,7 +72,6 @@ export function SearchForm() {
 
     //Navigate to the results url with its params
     const listingsSearchParams = new URLSearchParams(cleanedFormData)
-    console.log(listingsSearchParams.toString())
     navigate(`/results?${listingsSearchParams.toString()}`)
   }
 
