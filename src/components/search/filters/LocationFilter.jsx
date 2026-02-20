@@ -19,7 +19,25 @@ export default function LocationFilter({ name, registerKey }) {
     watch,
     formState: { errors }
   } = useFormContext()
+
   const [locationInput] = useDebounce(watch(registerKey), 200)
+
+  const fetchCities = async (location) => {
+    const searchByCityUrl = `https://geo.api.gouv.fr/communes?nom=${location.trim()}&boost=population&limit=10&fields=nom,codesPostaux`
+    const searchByPostalCodeUrl = `https://geo.api.gouv.fr/communes?codePostal=${location.trim()}&boost=population&limit=10&fields=nom,codesPostaux`
+    const searchByDepartementUrl = `https://geo.api.gouv.fr/departements/${location.trim()}/communes`
+
+    //Select search url based on user input (string, 2 digit integer (for departements), other integer (for city)
+    let searchUrl = ''
+    if (isNaN(location)) {
+      searchUrl = searchByCityUrl
+    } else {
+      searchUrl = location.trim().length === 2 ? searchByDepartementUrl : searchByPostalCodeUrl
+    }
+
+    const res = await axios.get(searchUrl)
+    return res.data
+  }
 
   //Query API
   const { data } = useQuery({
@@ -28,17 +46,12 @@ export default function LocationFilter({ name, registerKey }) {
     enabled: locationInput?.trim().length >= 1
   })
 
-  const fetchCities = async (location) => {
-    const url = `https://geo.api.gouv.fr/communes?nom=${location.trim()}&boost=population&limit=10&fields=nom,codesPostaux`
-    const res = await axios.get(url)
-    return res.data
-  }
-
   //Format cities with city and postal code.
   //Note : Multiple postal code for the same city produce entry
   const formatedCities = () => {
     const results = []
     data?.forEach((cityEntry) => {
+      if (cityEntry.codesPostaux.length > 1) results.push(`${cityEntry.nom} (toute la ville)`)
       results.push(...cityEntry.codesPostaux.map((codePostal) => `${cityEntry.nom} (${codePostal})`))
     })
     return results
@@ -48,13 +61,13 @@ export default function LocationFilter({ name, registerKey }) {
   return (
     <div className={'flex flex-col justify-between content-center gap-y-2'}>
       <p className={'text-sm pl-0.5'}>{name}</p>
-      <Combobox items={formatedCities()}>
+      <Combobox items={formatedCities()} filter={null}>
         <ComboboxInput placeholder={'Saisir le code postal ou la ville'} {...register(registerKey)}></ComboboxInput>
         <ComboboxContent>
           <ComboboxEmpty>Aucune ville trouvée</ComboboxEmpty>
           <ComboboxList>
             {(item) => (
-              <ComboboxItem key={item} value={item}>
+              <ComboboxItem key={item} value={item} keywords={item}>
                 {item}
               </ComboboxItem>
             )}

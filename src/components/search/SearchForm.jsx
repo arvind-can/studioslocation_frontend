@@ -55,18 +55,23 @@ export function SearchForm() {
   const navigate = useNavigate()
   const onSubmitHandler = (data) => {
     const cleanedFormData = Object.assign(data)
-
+    console.log(cleanedFormData)
     //Remove empty entries from the form
     Object.keys(cleanedFormData).forEach((key) => {
       if (cleanedFormData[key] === undefined || cleanedFormData[key].length === 0) delete cleanedFormData[key]
     })
 
     //Parse location into city and codePostal
-    //Note : Last space and integer is postalCode, the rest is City
-    if (cleanedFormData['location'] !== undefined) {
-      const [_, city, postalCode] = cleanedFormData['location'].match(/^(.*)\s*\((\d+)\)$/)
-      cleanedFormData['city'] = city.trim()
-      cleanedFormData['postalCode'] = postalCode
+    //In case user chose the whole city (for multiple codePostal), only city is defined
+    const location = cleanedFormData['location']
+    if (location !== undefined) {
+      if (location.includes('(toute la ville)')) {
+        cleanedFormData['city'] = location.replace(' (toute la ville)', '')
+      } else {
+        const [_, city, postalCode] = location.match(/^(.*)\s*\((\d+)\)$/)
+        cleanedFormData['city'] = city.trim()
+        cleanedFormData['postalCode'] = postalCode
+      }
       delete cleanedFormData['location']
     }
 

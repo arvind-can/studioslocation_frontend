@@ -26,6 +26,8 @@ export default function ResultsList() {
       name: studio.title,
       rent: studio.rent,
       surface: studio.surface,
+      city: studio.city,
+      postalCode: studio.postalCode,
       image: 'https://images.unsplash.com/photo-1602146057681-08560aee8cde?q=80&w=640&auto=format&fit=crop'
     }))
 
