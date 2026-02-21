@@ -6,7 +6,7 @@ import {
   ComboboxItem,
   ComboboxList
 } from '@/components/ui/combobox.jsx'
-import { useFormContext } from 'react-hook-form'
+import { useController, useFormContext } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 import { useDebounce } from 'use-debounce'
 import axios from 'axios'
@@ -17,9 +17,10 @@ export default function LocationFilter({ name, registerKey }) {
   const {
     register,
     watch,
+    control,
     formState: { errors }
   } = useFormContext()
-
+  const { field } = useController({ name: registerKey, control: control })
   const [locationInput] = useDebounce(watch(registerKey), 200)
 
   const fetchCities = async (location) => {
@@ -61,8 +62,12 @@ export default function LocationFilter({ name, registerKey }) {
   return (
     <div className={'flex flex-col justify-between content-center gap-y-2'}>
       <p className={'text-sm pl-0.5'}>{name}</p>
-      <Combobox items={formatedCities()} filter={null}>
-        <ComboboxInput placeholder={'Saisir le code postal ou la ville'} {...register(registerKey)}></ComboboxInput>
+      <Combobox value={field.value} onValueChange={field.onChange} items={formatedCities()} filter={null}>
+        <ComboboxInput
+          placeholder={'Saisir le code postal ou la ville'}
+          value={field?.value}
+          onChange={field?.onChange}
+        />
         <ComboboxContent>
           <ComboboxEmpty>Aucune ville trouvée</ComboboxEmpty>
           <ComboboxList>

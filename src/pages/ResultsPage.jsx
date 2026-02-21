@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator.jsx'
 export default function ResultsPage() {
   return (
     <>
-      <Menubar />
+      <Menubar withFilters={true} />
       <div className='max-w-5xl mx-auto px-4 py-6'>
         <span className='text-2xl font-bold'>Logements trouvés</span>
         <Separator className={'mt-3 mb-5'} />

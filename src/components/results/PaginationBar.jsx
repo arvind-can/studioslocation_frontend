@@ -31,7 +31,7 @@ export default function PaginationBar({ currentPageNo, totalPageNo }) {
 
   const paginationItems = []
 
-  // --- Première page + ellipsis début ---
+  //Première page + ellipsis début
   if (start > 0) {
     paginationItems.push(
       <PaginationItem key={0}>
@@ -50,7 +50,7 @@ export default function PaginationBar({ currentPageNo, totalPageNo }) {
     }
   }
 
-  // --- Pages centrales ---
+  //Pages centrales
   for (let cpt = start; cpt <= end; cpt++) {
     paginationItems.push(
       <PaginationItem key={cpt}>
@@ -61,7 +61,7 @@ export default function PaginationBar({ currentPageNo, totalPageNo }) {
     )
   }
 
-  // --- Dernière page + ellipsis fin ---
+  //Dernière page + ellipsis fin
   if (end < totalPageNo - 1) {
     if (end < totalPageNo - 2) {
       paginationItems.push(

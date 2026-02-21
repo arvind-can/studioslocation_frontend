@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import SearchQuestion from '@/components/search/SearchQuestion.jsx'
 import { SearchForm } from '@/components/search/SearchForm.jsx'
 
-export default function HomeSearchCard() {
+export default function SearchCard() {
   return (
     <Card className={'lg:w-1/2 md:2/3 sm:w-3/4'}>
       <CardHeader>
